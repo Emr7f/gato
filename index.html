@@ -305,12 +305,21 @@ async function cargarDBZ() {
   if (DBZ.length || dbzCargando) return;
   dbzCargando = true;
   try {
-    var cache = await cargar("xyo:dbz");
+    var cache = await cargar("xyo:dbz2");
     if (cache && cache.length) { DBZ = cache; dbzCargando = false; return; }
     var r = await fetch("https://dragonball-api.com/api/characters?page=1&limit=20");
     var j = await r.json();
-    DBZ = (j.items || []).map(function (c) { return { id: c.id, n: c.name, img: c.image }; });
-    if (DBZ.length) guardar("xyo:dbz", DBZ);
+    var lista = (j.items || []).map(function (c) { return { id: c.id, n: c.name, img: c.image }; });
+    // Transformaciones de Goku (SSJ, SSJ3, Ultra Instinto...) como stickers extra
+    try {
+      var rg = await fetch("https://dragonball-api.com/api/characters/1");
+      var goku = await rg.json();
+      (goku.transformations || []).forEach(function (t) {
+        lista.push({ id: 1000 + t.id, n: t.name, img: t.image });
+      });
+    } catch (e2) { /* si falla, quedan los 20 base */ }
+    DBZ = lista;
+    if (DBZ.length) guardar("xyo:dbz2", DBZ);
   } catch (e) { /* sin internet: se intenta de nuevo al abrir el panel */ }
   dbzCargando = false;
 }
