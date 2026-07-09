@@ -10,108 +10,81 @@
 <meta name="theme-color" content="#7C5CFC" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%B1%3C/text%3E%3C/svg%3E" />
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Bungee&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; padding: 0; overflow-x: hidden; width: 100%; }
-
-/* ---------- Temas (mundos) ---------- */
-body, body[data-tema="gatitos"] {
-  --fondo: linear-gradient(160deg, #FFF6EC 0%, #FFE9F3 55%, #EDE7FF 100%);
-  --carta: #fff; --texto: #4A3F6B; --suave: #A99CC9; --suave2: #8B7FB0;
-  --panel: #F3EEFF; --panelbg: #FBFAFF; --borde: #EDE7FF; --borde2: #E4DCF7;
-  --celda: #fff; --pillbg: #FCFAFF; --input: #fff;
-  --overlay: linear-gradient(170deg, #7C5CFC, #4A2E85);
-  --acento: #FFC93C; --acentotxt: #6B4A00; --acentosombra: #D19E13;
-  --sombra: 0 18px 40px rgba(124,92,252,.18), 0 4px 10px rgba(0,0,0,.05);
-}
-body[data-tema="selva"] {
-  --fondo: linear-gradient(170deg, #EAF8DC 0%, #CBE8AF 100%);
-  --carta: #fff; --texto: #33691E; --suave: #8DB573; --suave2: #6B9A4E;
-  --panel: #EDF7E2; --panelbg: #F7FCF0; --borde: #DDEECB; --borde2: #CBE3B2;
-  --celda: #F6FFF0; --pillbg: #FBFFF6; --input: #fff;
-  --overlay: linear-gradient(170deg, #1B5E20, #0D3B12);
-  --acento: #AEEA00; --acentotxt: #33691E; --acentosombra: #7CB000;
-  --sombra: 0 18px 40px rgba(76,175,87,.22), 0 4px 10px rgba(0,0,0,.05);
-}
-body[data-tema="galaxia"] {
-  --fondo: linear-gradient(170deg, #1B1340 0%, #0E0A2A 100%);
-  --carta: #241A52; --texto: #EDE7FF; --suave: #8E7CC3; --suave2: #A99CD8;
-  --panel: #191140; --panelbg: #1D1548; --borde: #3A2C74; --borde2: #453586;
-  --celda: #191140; --pillbg: #1D1548; --input: #191140;
-  --overlay: linear-gradient(170deg, #0E0A2AF6, #1B1340F6);
-  --acento: #00E5FF; --acentotxt: #00313A; --acentosombra: #00A5B8;
-  --sombra: 0 18px 40px rgba(0,0,0,.5), 0 0 30px rgba(108,63,212,.25);
-}
-
 body {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
   padding: max(18px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
-  background: var(--fondo);
-  font-family: 'Fredoka', system-ui, -apple-system, sans-serif; color: var(--texto);
+  background: linear-gradient(160deg, #FFF6EC 0%, #FFE9F3 55%, #EDE7FF 100%);
+  font-family: 'Fredoka', system-ui, -apple-system, sans-serif; color: #4A3F6B;
 }
 #app { width: 100%; max-width: 380px; }
 .tarjeta {
-  background: var(--carta); border-radius: 30px; padding: 18px 18px 14px;
-  box-shadow: var(--sombra);
-  overflow: hidden; position: relative;
+  background: #fff; border-radius: 30px; padding: 18px 18px 14px;
+  box-shadow: 0 18px 40px rgba(124,92,252,.18), 0 4px 10px rgba(0,0,0,.05);
+  overflow: hidden;
 }
 .cabecera { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .titulo { display: flex; align-items: center; gap: 9px; }
-.gatito { font-size: 32px; line-height: 1; animation: wiggle 2.4s ease-in-out infinite; display: inline-block; }
+.gatito { font-size: 32px; line-height: 1; }
 .titulo h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: .5px; }
-.sub { margin: 0; font-size: 12px; font-weight: 500; color: var(--suave); }
-.icono { border: none; background: var(--panel); color: var(--texto); width: 42px; height: 42px; border-radius: 13px; font-size: 19px; cursor: pointer; }
+.sub { margin: 0; font-size: 12px; font-weight: 500; color: #A99CC9; }
+.icono { border: none; background: #F3EEFF; width: 42px; height: 42px; border-radius: 13px; font-size: 19px; cursor: pointer; }
 .icono:active { transform: scale(.9); }
 .cab-botones { display: flex; gap: 6px; }
-.leyenda { font-size: 11px; color: var(--suave); font-weight: 600; margin-bottom: 8px; }
+.leyenda { font-size: 11px; color: #A99CC9; font-weight: 600; margin-bottom: 8px; }
 .tfila { display: grid; grid-template-columns: 1fr 36px 36px 36px 36px; align-items: center; padding: 7px 6px; border-radius: 10px; font-size: 14px; font-weight: 600; }
-.tfila:nth-child(odd) { background: var(--celda); }
+.tfila:nth-child(odd) { background: #fff; }
 .tfila span { text-align: center; }
 .tfila .tnom { text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tfila.tcab { font-size: 13px; padding: 2px 6px; background: none; }
-.vacio { text-align: center; font-size: 13px; color: var(--suave); font-weight: 600; padding: 10px 0; }
+.vacio { text-align: center; font-size: 13px; color: #A99CC9; font-weight: 600; padding: 10px 0; }
 
-.modo { display: flex; gap: 6px; background: var(--panel); padding: 4px; border-radius: 14px; margin-bottom: 8px; }
-.modo button { flex: 1; border: none; background: transparent; padding: 9px 6px; border-radius: 11px; font-family: inherit; font-size: 13.5px; font-weight: 600; color: var(--suave2); cursor: pointer; }
-.modo button.on { background: var(--celda); color: var(--texto); box-shadow: 0 2px 6px rgba(0,0,0,.12); }
+/* Modo pantalla completa durante la partida */
+.salirEnf { display: none; }
+body.enfoque #app { max-width: min(96vw, 540px); }
+body.enfoque .tarjeta { padding-top: 46px; position: relative; }
+body.enfoque .cabecera, body.enfoque .modo, body.enfoque .dif, body.enfoque .serietxt,
+body.enfoque .marcador, body.enfoque .acciones, body.enfoque .panel, body.enfoque .pie { display: none; }
+body.enfoque .estado { font-size: 25px; margin: 0 0 14px; }
+body.enfoque .tabla { margin-bottom: 4px; }
+body.enfoque .salirEnf {
+  display: inline-flex; position: absolute; top: 10px; right: 12px;
+  border: none; background: #F3EEFF; color: #8B7FB0; border-radius: 12px;
+  padding: 7px 12px; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer;
+}
+
+.modo { display: flex; gap: 6px; background: #F3EEFF; padding: 4px; border-radius: 14px; margin-bottom: 8px; }
+.modo button { flex: 1; border: none; background: transparent; padding: 9px 6px; border-radius: 11px; font-family: inherit; font-size: 13.5px; font-weight: 600; color: #8B7FB0; cursor: pointer; }
+.modo button.on { background: #fff; color: #4A3F6B; box-shadow: 0 2px 6px rgba(124,92,252,.15); }
 
 .dif { display: flex; gap: 6px; margin-bottom: 10px; }
-.dif button { flex: 1; border: 2px solid var(--borde); background: var(--carta); padding: 7px; border-radius: 11px; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--suave); cursor: pointer; }
-.dif button.on { border-color: var(--acento); color: var(--texto); }
+.dif button { flex: 1; border: 2px solid #EDE7FF; background: #fff; padding: 7px; border-radius: 11px; font-family: inherit; font-size: 12.5px; font-weight: 600; color: #A99CC9; cursor: pointer; }
+.dif button.on { border-color: #7C5CFC; color: #7C5CFC; }
 .serieRow { align-items: center; }
-.serieLab { font-size: 12px; font-weight: 700; color: var(--suave); padding: 0 3px; white-space: nowrap; }
+.serieLab { font-size: 12px; font-weight: 700; color: #A99CC9; padding: 0 3px; white-space: nowrap; }
 .serieRow button { padding: 7px 4px; }
-.serietxt { text-align: center; font-size: 12px; font-weight: 600; color: var(--suave2); margin: -3px 0 10px; }
+.serietxt { text-align: center; font-size: 12px; font-weight: 600; color: #8B7FB0; margin: -3px 0 10px; }
 
 .marcador { display: flex; gap: 7px; margin-bottom: 10px; }
-.pill { flex: 1; background: var(--pillbg); border: 2.5px solid var(--borde); border-radius: 15px; padding: 7px 5px; text-align: center; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.pill { flex: 1; background: #FCFAFF; border: 2.5px solid #EDE7FF; border-radius: 15px; padding: 7px 5px; text-align: center; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .pill.emp { flex: .9; }
 .pill-etq { font-size: 13.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pill-etq.gris { color: var(--suave); font-size: 11px; }
-.pill-num { font-size: 22px; font-weight: 700; color: var(--texto); }
+.pill-etq.gris { color: #B4A9D0; font-size: 11px; }
+.pill-num { font-size: 22px; font-weight: 700; color: #4A3F6B; }
 
 .estado { text-align: center; font-size: 20px; font-weight: 600; margin: 2px 0 12px; min-height: 28px; display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; }
 .estado b { font-weight: 700; }
 
 .tabla { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; padding: 8px; border-radius: 22px; margin-bottom: 14px; transition: background .3s; overflow: hidden; }
-.tabla.shake { animation: shakeK .45s ease; }
-.celda { aspect-ratio: 1/1; background: var(--celda); border: none; border-radius: 15px; cursor: pointer; padding: 12%; display: flex; align-items: center; justify-content: center; overflow: hidden; min-width: 0; }
+.celda { aspect-ratio: 1/1; background: #fff; border: none; border-radius: 15px; cursor: pointer; padding: 12%; display: flex; align-items: center; justify-content: center; overflow: hidden; min-width: 0; }
 .celda:active:not(:disabled) { transform: scale(.94); }
-.marca { width: 100%; height: 100%; }
-.marca.nueva { animation: flipin .4s cubic-bezier(.34,1.5,.64,1); }
+.marca { width: 100%; height: 100%; animation: pop .25s cubic-bezier(.34,1.4,.64,1); }
 .marca.emoji { display: flex; align-items: center; justify-content: center; font-size: clamp(30px, 12.5vw, 52px); line-height: 1; }
 .marca.gana { animation: latido .8s ease-in-out infinite; }
 @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
-@keyframes flipin { from { transform: rotateY(90deg) scale(.5); opacity: 0; } to { transform: rotateY(0) scale(1); opacity: 1; } }
 @keyframes latido { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-@keyframes shakeK { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-7px); } 40% { transform: translateX(7px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
-@keyframes wiggle { 0%,100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
-@keyframes bobber { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-@keyframes rays { to { transform: rotate(360deg); } }
-@keyframes dropin { 0% { transform: translateY(-90px) scale(.4); opacity: 0; } 60% { transform: translateY(8px) scale(1.1); } 100% { transform: translateY(0) scale(1); opacity: 1; } }
-@keyframes bounceIn { 0% { transform: scale(0); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
-@keyframes pulseBtn { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-@keyframes fxfly { to { transform: translate(var(--dx), var(--dy)) scale(.1); opacity: 0; } }
 
 .acciones { display: flex; gap: 7px; }
 .btn { border: none; border-radius: 15px; padding: 13px 6px; font-family: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; min-width: 0; }
@@ -123,80 +96,56 @@ body {
 .btn-sec.jug { background: #D8EAFF; color: #1E5DAA; box-shadow: 0 5px 0 #AECDF5; }
 .btn-sec.jug:active { box-shadow: 0 2px 0 #AECDF5; }
 
-.panel { margin-top: 11px; background: var(--panelbg); border: 2px solid var(--borde); border-radius: 18px; padding: 13px; animation: baja .22s ease; }
+.panel { margin-top: 11px; background: #FBFAFF; border: 2px solid #EDE7FF; border-radius: 18px; padding: 13px; animation: baja .22s ease; }
 @keyframes baja { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-.panel h3 { margin: 0 0 9px; font-size: 13px; font-weight: 700; color: var(--suave2); }
-.panel h4 { margin: 10px 0 7px; font-size: 12px; font-weight: 700; color: var(--suave); }
+.panel h3 { margin: 0 0 9px; font-size: 13px; font-weight: 700; color: #8B7FB0; }
+.panel h4 { margin: 10px 0 7px; font-size: 12px; font-weight: 700; color: #A99CC9; }
 .selq { display: flex; gap: 6px; margin-bottom: 11px; flex-wrap: wrap; }
-.chip { flex: 1; min-width: 88px; border: 2px solid var(--borde2); background: var(--carta); color: var(--suave2); border-radius: 11px; padding: 8px 5px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
-.temas { display: flex; gap: 6px; margin-bottom: 4px; }
-.tema { flex: 1; border: 2px solid var(--borde2); background: var(--carta); color: var(--suave2); border-radius: 13px; padding: 9px 4px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; flex-direction: column; gap: 2px; align-items: center; }
-.tema .tico { font-size: 22px; line-height: 1; }
-.tema.on { border-color: var(--acento); color: var(--texto); box-shadow: 0 0 0 2px var(--acento) inset; }
+.chip { flex: 1; min-width: 88px; border: 2px solid #E4DCF7; background: #fff; color: #8B7FB0; border-radius: 11px; padding: 8px 5px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
 .swatches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; }
-.swatch { aspect-ratio: 1/1; border-radius: 50%; border: 3px solid var(--carta); cursor: pointer; box-shadow: 0 0 0 2px var(--borde2); }
+.swatch { aspect-ratio: 1/1; border-radius: 50%; border: 3px solid #fff; cursor: pointer; box-shadow: 0 0 0 2px #E4DCF7; }
 .swatch:active { transform: scale(.9); }
-.swatch.sel { box-shadow: 0 0 0 3px var(--texto); transform: scale(1.08); }
+.swatch.sel { box-shadow: 0 0 0 3px #4A3F6B; transform: scale(1.08); }
 .fichas { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-bottom: 4px; }
-.ficha { aspect-ratio: 1/1; border-radius: 14px; border: 2px solid var(--borde2); background: var(--celda); font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; min-width: 0; overflow: hidden; }
-.ficha.sel { border-color: var(--acento); box-shadow: 0 0 0 2px var(--acento); transform: scale(1.06); }
+.ficha { aspect-ratio: 1/1; border-radius: 14px; border: 2px solid #E4DCF7; background: #fff; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; min-width: 0; overflow: hidden; }
+.ficha.sel { border-color: #4A3F6B; box-shadow: 0 0 0 2px #4A3F6B33; transform: scale(1.06); }
 .ficha.usada { opacity: .3; }
 .ficha svg { width: 60%; height: 60%; }
 .ficha.pokeb img { width: 88%; height: 88%; max-width: 100%; object-fit: contain; pointer-events: none; }
-.pokeinfo { margin-top: 10px; background: var(--celda); border: 2px solid var(--borde2); border-radius: 12px; padding: 10px 12px; font-size: 12.5px; color: var(--suave2); line-height: 1.5; }
-.pokeinfo b { color: var(--texto); }
+.pokeinfo { margin-top: 10px; background: #fff; border: 2px solid #E4DCF7; border-radius: 12px; padding: 10px 12px; font-size: 12.5px; color: #6B5FA0; line-height: 1.5; }
+.pokeinfo b { color: #4A3F6B; }
 .pokeinfo .tit { font-size: 14px; margin-bottom: 4px; }
 .marca.poke { object-fit: contain; }
-.poke-fallo { display: flex; align-items: center; justify-content: center; font-size: clamp(10px, 3.4vw, 14px); font-weight: 700; color: var(--texto); text-align: center; line-height: 1.1; padding: 4px; overflow: hidden; }
-.mini-fallo { font-size: 11px; font-weight: 700; color: var(--suave2); }
+.poke-fallo { display: flex; align-items: center; justify-content: center; font-size: clamp(10px, 3.4vw, 14px); font-weight: 700; color: #4A3F6B; text-align: center; line-height: 1.1; padding: 4px; overflow: hidden; }
+.mini-fallo { font-size: 11px; font-weight: 700; color: #8B7FB0; }
 .mini { width: 19px; height: 19px; object-fit: contain; vertical-align: -4px; }
 
 .agregar { display: flex; gap: 6px; margin-bottom: 12px; }
-.agregar input { flex: 1; min-width: 0; border: 2px solid var(--borde2); border-radius: 11px; padding: 10px 12px; font-family: inherit; font-size: 15px; color: var(--texto); background: var(--input); outline: none; }
-.agregar input:focus { border-color: var(--acento); }
+.agregar input { flex: 1; min-width: 0; border: 2px solid #E4DCF7; border-radius: 11px; padding: 10px 12px; font-family: inherit; font-size: 15px; color: #4A3F6B; background: #fff; outline: none; }
+.agregar input:focus { border-color: #7C5CFC; }
 .agregar button { border: none; background: #6BCB77; color: #fff; border-radius: 11px; padding: 0 16px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
 .roster { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-.namechip { display: inline-flex; align-items: center; gap: 6px; background: var(--celda); border: 2px solid var(--borde2); border-radius: 20px; padding: 5px 6px 5px 12px; font-size: 13px; font-weight: 600; color: var(--texto); }
+.namechip { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 2px solid #E4DCF7; border-radius: 20px; padding: 5px 6px 5px 12px; font-size: 13px; font-weight: 600; color: #4A3F6B; }
 .namechip .x { width: 20px; height: 20px; border-radius: 50%; background: #FFE0E0; color: #E24; border: none; font-size: 13px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
 .asig { margin-bottom: 10px; }
 .asig .lab { font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
 .asig .fila { display: flex; flex-wrap: wrap; gap: 6px; }
-.pick { border: 2px solid var(--borde2); background: var(--carta); color: var(--suave2); border-radius: 20px; padding: 6px 13px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.pick { border: 2px solid #E4DCF7; background: #fff; color: #8B7FB0; border-radius: 20px; padding: 6px 13px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
 .pick.on { color: #fff; }
 
 .pie { text-align: center; margin-top: 11px; }
-.link { background: none; border: none; color: var(--suave); font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; padding: 4px 8px; }
+.link { background: none; border: none; color: #B4A9D0; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; padding: 4px 8px; }
 .link.fuerte { color: #FF5A5F; font-weight: 700; }
-.confirmar { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; font-size: 13px; color: var(--suave2); }
-
-/* ---------- Pantalla de victoria ---------- */
-#velo { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; padding: 20px; background: var(--overlay); overflow: hidden; }
-#velo.abierto { display: flex; animation: baja .3s ease; }
-.rayos { position: absolute; width: 150vmax; height: 150vmax; background: repeating-conic-gradient(rgba(255,255,255,.09) 0 14deg, transparent 14deg 28deg); border-radius: 50%; animation: rays 16s linear infinite; }
-.vcontenido { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; max-width: 340px; width: 100%; }
-.vmedalla { font-size: 40px; animation: dropin .6s cubic-bezier(.34,1.4,.64,1); }
-.vficha { animation: bobber 1.2s ease-in-out infinite; }
-.vficha .emoji { font-size: 92px; line-height: 1; }
-.vficha img { width: 130px; height: 130px; object-fit: contain; }
-.vficha svg { width: 100px; height: 100px; }
-.vtitulo { font-family: 'Bungee', 'Fredoka', sans-serif; font-size: 30px; color: var(--acento); animation: bounceIn .5s .1s cubic-bezier(.34,1.5,.64,1) both; text-shadow: 0 0 18px rgba(255,255,255,.25); }
-.vnombre { font-size: 17px; font-weight: 600; color: rgba(255,255,255,.85); }
-.vbotones { display: flex; gap: 8px; margin-top: 16px; width: 100%; }
-.vbtn { flex: 1.5; border: none; cursor: pointer; background: var(--acento); color: var(--acentotxt); font-family: inherit; font-size: 17px; font-weight: 600; padding: 14px 10px; border-radius: 16px; box-shadow: 0 5px 0 var(--acentosombra); animation: pulseBtn 1.8s ease-in-out infinite; }
-.vbtn:active { box-shadow: 0 2px 0 var(--acentosombra); transform: scale(.97); }
-.vbtn.suave { flex: 1; background: rgba(255,255,255,.14); color: #fff; box-shadow: none; animation: none; font-size: 14px; }
+.confirmar { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; font-size: 13px; color: #8B7FB0; }
 
 #confeti { position: fixed; inset: 0; pointer-events: none; z-index: 60; overflow: hidden; }
 .pieza { position: absolute; top: -20px; border-radius: 2px; animation: caer linear forwards; }
-.chispa { position: absolute; border-radius: 50%; animation: fxfly cubic-bezier(.1,.8,.3,1) forwards; }
-.estrellita { position: absolute; line-height: 1; animation: fxfly cubic-bezier(.1,.8,.3,1) forwards; }
 @keyframes caer { 0% { transform: translateY(-20px) rotate(0); opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: .9; } }
-@media (prefers-reduced-motion: reduce) { .marca, .panel, .pieza, .chispa, .estrellita, .rayos, .gatito { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .marca, .panel, .pieza { animation: none !important; } }
 </style>
 </head>
-<body data-tema="gatitos">
+<body>
 <div id="app"></div>
-<div id="velo"></div>
 <div id="confeti"></div>
 <script>
 "use strict";
@@ -214,7 +163,7 @@ async function guardar(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
   } catch (e) {}
 }
-var K_MARC = "xyo:marcador", K_COL = "xyo:colores", K_CFG = "xyo:config", K_FICH = "xyo:fichas", K_HIST = "xyo:historial", K_TEMA = "xyo:tema";
+var K_MARC = "xyo:marcador", K_COL = "xyo:colores", K_CFG = "xyo:config", K_FICH = "xyo:fichas", K_HIST = "xyo:historial";
 
 // ---------- Sonidos ----------
 var AC = window.AudioContext || window.webkitAudioContext, ctx = null;
@@ -233,16 +182,9 @@ function sEmpate() { if (S.silencio) return; tono(392, .2, "sine", 0, .15); tono
 function sCampeon() { if (S.silencio) return; [523, 659, 784, 1047, 784, 1047, 1319].forEach(function (f, i) { tono(f, .3, "triangle", i * .13, .2); }); }
 function sClick() { if (!S.silencio) tono(700, .08, "sine", 0, .1); }
 
-// ---------- Temas (mundos) ----------
-var TEMAS = {
-  gatitos: { icono: "\uD83D\uDC31", nombre: "Gatitos", sub: "El juego del gato", colores: { x: "#FF5A5F", o: "#2D9CDB", tabla: "#7C5CFC" }, fichas: { x: "\uD83D\uDC31", o: "\uD83D\uDC36" }, celebra: "estrellas" },
-  selva:   { icono: "\uD83E\uDD81", nombre: "Selva",   sub: "Batalla en la selva", colores: { x: "#F9A825", o: "#26A69A", tabla: "#4CAF57" }, fichas: { x: "\uD83E\uDD81", o: "\uD83D\uDC0A" }, celebra: "confeti" },
-  galaxia: { icono: "\uD83D\uDC7E", nombre: "Galaxia", sub: "Duelo gal\u00E1ctico", colores: { x: "#B388FF", o: "#00E5FF", tabla: "#2E2168" }, fichas: { x: "\uD83D\uDC7E", o: "\uD83E\uDD16" }, celebra: "fireworks" }
-};
-
 // ---------- Estado ----------
 var PALETA = ["#FF5A5F","#FF8A3D","#FFC93C","#6BCB77","#2D9CDB","#4D5DFB","#7C5CFC","#E84393","#8D6E63","#2D3436"];
-var EMOJIS = ["\uD83D\uDC22","\uD83D\uDC20","\uD83D\uDC31","\uD83D\uDC2D","\uD83D\uDC18","\uD83D\uDC36","\uD83E\uDD81","\uD83D\uDC38","\uD83E\uDD84","\uD83D\uDC3C","\uD83E\uDD96","\uD83D\uDC19","\uD83D\uDC24","\u2B50","\u2764\uFE0F","\uD83D\uDC0A","\uD83D\uDC7E","\uD83E\uDD16"];
+var EMOJIS = ["🐢","🐠","🐱","🐭","🐘","🐶","🦁","🐸","🦄","🐼","🦖","🐙","🐤","⭐","❤️"];
 // Los 21 Pokémon más famosos (uso privado): [id, nombre, carta icónica, historia]
 var POKES = [
   [25, "Pikachu", "Pikachu Illustrator (1998) — la carta m\u00E1s cara de la historia: una lleg\u00F3 a venderse por m\u00E1s de 5 millones de d\u00F3lares", "La mascota de Pok\u00E9mon. Guarda electricidad en sus mejillas y la suelta cuando se emociona o se asusta."],
@@ -268,6 +210,7 @@ var POKES = [
   [877, "Morpeko", "Morpeko V-UNION (2021) — un rompecabezas de 4 cartas que se arma", "Tiene dos caras: feliz cuando est\u00E1 lleno y gru\u00F1\u00F3n cuando tiene hambre. Siempre carga semillas para no cambiar de humor."]
 ];
 function pokeURL(id) { return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + id + ".png"; }
+// Plan B si una imagen no carga: intenta otra fuente y, si tampoco, muestra el nombre.
 window.pokeErr = function (img) {
   if (!img.dataset.paso) {
     img.dataset.paso = "1";
@@ -281,20 +224,38 @@ window.pokeErr = function (img) {
 };
 function esPoke(f) { return typeof f === "string" && f.indexOf("P:") === 0; }
 function pokeNombre(f) { var id = parseInt(f.slice(2), 10); for (var i = 0; i < POKES.length; i++) if (POKES[i][0] === id) return POKES[i][1]; return "Pok\u00E9mon"; }
+
+// ---------- Dragon Ball (stickers vía dragonball-api.com) ----------
+var DBZ = []; // [{id, n: nombre, img}]
+var dbzCargando = false;
+function esDBZ(f) { return typeof f === "string" && f.indexOf("D:") === 0; }
+function dbzDe(f) { var id = parseInt(f.slice(2), 10); for (var i = 0; i < DBZ.length; i++) if (DBZ[i].id === id) return DBZ[i]; return null; }
+async function cargarDBZ() {
+  if (DBZ.length || dbzCargando) return;
+  dbzCargando = true;
+  try {
+    var cache = await cargar("xyo:dbz");
+    if (cache && cache.length) { DBZ = cache; dbzCargando = false; return; }
+    var r = await fetch("https://dragonball-api.com/api/characters?page=1&limit=20");
+    var j = await r.json();
+    DBZ = (j.items || []).map(function (c) { return { id: c.id, n: c.name, img: c.image }; });
+    if (DBZ.length) guardar("xyo:dbz", DBZ);
+  } catch (e) { /* sin internet: se intenta de nuevo al abrir el panel */ }
+  dbzCargando = false;
+}
 var LINEAS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 var S = {
   tablero: Array(9).fill(null), turno: "X", empieza: "X", resultado: null,
   marcador: { X: 0, O: 0, empates: 0 },
-  tema: "gatitos",
   colores: { x: "#FF5A5F", o: "#2D9CDB", tabla: "#7C5CFC" },
-  fichas: { x: "\uD83D\uDC31", o: "\uD83D\uDC36" },
+  fichas: { x: "X", o: "O" }, // "X"/"O" clásicos, o un emoji
   modo: "dos", dificultad: "facil",
   jugadores: ["Jugador 1", "Jugador 2"], nombreX: "Jugador 1", nombreO: "Jugador 2",
   silencio: false, panel: null, editColor: "x", nuevoNombre: "",
   confirmar: null, pensando: false,
-  serie: 0, campeon: null,
-  hist: {},
-  ultima: -1, sacudir: false, velo: null // velo: null | "victoria" | "campeon"
+  serie: 0, campeon: null, // serie: 0 = libre, o 3/5/7/9/13 (mejor de N)
+  hist: {}, // historial de por vida por persona: { nombre: {g, e, p, c} }
+  enfoque: false, // pantalla completa del tablero durante la partida
 };
 
 // ---------- Lógica ----------
@@ -317,7 +278,7 @@ function nombreDe(m) { return m === "X" ? S.nombreX : (S.modo === "compu" ? "La 
 function statDe(n) { if (!S.hist[n]) S.hist[n] = { g: 0, e: 0, p: 0, c: 0 }; return S.hist[n]; }
 function registrarRonda(res) {
   var nX = nombreDe("X"), nO = nombreDe("O");
-  if (nX === nO) return;
+  if (nX === nO) return; // misma persona en ambos lados: no cuenta
   if (res.jugador === "empate") { statDe(nX).e++; statDe(nO).e++; }
   else {
     var gana = nombreDe(res.jugador), pierde = res.jugador === "X" ? nO : nX;
@@ -334,23 +295,17 @@ function esClasica(f) { return f === "X" || f === "O"; }
 // ---------- Aplicar jugadas ----------
 function aplicar(marca, i) {
   if (S.tablero[i] || S.resultado) return;
-  S.tablero[i] = marca; S.ultima = i; sTap(marca);
+  S.tablero[i] = marca; sTap(marca);
   var r = ganadorDe(S.tablero);
+  S.enfoque = !r; // en juego: pantalla completa; al terminar: vista normal
   if (r) {
     S.resultado = r;
     if (r.jugador === "empate") { S.marcador.empates++; sEmpate(); }
     else {
       S.marcador[r.jugador]++;
-      S.sacudir = true;
-      setTimeout(function () { S.sacudir = false; render(); }, 500);
       var meta = metaSerie();
-      if (meta && S.marcador[r.jugador] >= meta) {
-        S.campeon = r.jugador; sCampeon();
-        setTimeout(function () { S.velo = "campeon"; render(); celebrar(true); }, 800);
-      } else {
-        sGanar();
-        setTimeout(function () { S.velo = "victoria"; render(); celebrar(false); }, 800);
-      }
+      if (meta && S.marcador[r.jugador] >= meta) { S.campeon = r.jugador; confeti(); setTimeout(confeti, 600); sCampeon(); }
+      else { confeti(); sGanar(); }
     }
     registrarRonda(r);
     guardar(K_MARC, S.marcador);
@@ -372,27 +327,16 @@ function jugarCelda(i) {
   aplicar(S.turno, i);
 }
 function nuevaRonda() {
-  if (S.campeon) { empezarDeCero(); return; }
+  if (S.campeon) { empezarDeCero(); return; } // terminó la serie: arranca una nueva
   if (S.modo === "dos") { S.empieza = S.empieza === "X" ? "O" : "X"; S.turno = S.empieza; }
   else { S.empieza = "X"; S.turno = "X"; }
-  S.tablero = Array(9).fill(null); S.resultado = null; S.pensando = false; S.ultima = -1; S.velo = null; sClick(); render();
+  S.tablero = Array(9).fill(null); S.resultado = null; S.pensando = false; S.enfoque = false; sClick(); render();
 }
 function empezarDeCero() {
   S.marcador = { X: 0, O: 0, empates: 0 };
-  S.tablero = Array(9).fill(null); S.resultado = null; S.pensando = false; S.campeon = null;
-  S.empieza = "X"; S.turno = "X"; S.confirmar = null; S.ultima = -1; S.velo = null;
+  S.tablero = Array(9).fill(null); S.resultado = null; S.pensando = false; S.campeon = null; S.enfoque = false;
+  S.empieza = "X"; S.turno = "X"; S.confirmar = null;
   guardar(K_MARC, S.marcador); sClick(); render();
-}
-
-// ---------- Temas ----------
-function setTema(t) {
-  if (!TEMAS[t]) return;
-  S.tema = t;
-  document.body.dataset.tema = t;
-  S.colores = Object.assign({}, TEMAS[t].colores);
-  S.fichas = Object.assign({}, TEMAS[t].fichas);
-  guardar(K_TEMA, t); guardar(K_COL, S.colores); guardar(K_FICH, S.fichas);
-  sClick(); render();
 }
 
 // ---------- Jugadores ----------
@@ -416,16 +360,15 @@ function setModo(m) { S.modo = m; guardarCfg(); nuevaRonda(); }
 function setFicha(f) {
   var lado = S.editColor === "o" ? "o" : "x";
   var otro = lado === "x" ? "o" : "x";
-  if (!esClasica(f) && S.fichas[otro] === f) return;
+  if (!esClasica(f) && S.fichas[otro] === f) return; // no repetir la misma ficha
   S.fichas[lado] = f; guardar(K_FICH, S.fichas); sClick(); render();
 }
 
-// ---------- Celebraciones ----------
-function capaFx() { return document.getElementById("confeti"); }
-function confeti(cols) {
-  var capa = capaFx();
-  cols = cols || [S.colores.x, S.colores.o, S.colores.tabla, "#FFC93C", "#6BCB77"];
-  for (var i = 0; i < 50; i++) {
+// ---------- Confeti ----------
+function confeti() {
+  var capa = document.getElementById("confeti");
+  var cols = [S.colores.x, S.colores.o, S.colores.tabla, "#FFC93C", "#6BCB77"];
+  for (var i = 0; i < 44; i++) {
     var p = document.createElement("span"); p.className = "pieza";
     var tam = 8 + Math.random() * 8;
     p.style.left = (Math.random() * 96) + "%";
@@ -434,77 +377,24 @@ function confeti(cols) {
     p.style.animationDelay = (Math.random() * .5) + "s";
     p.style.animationDuration = (1.6 + Math.random() * 1.2) + "s";
     capa.appendChild(p);
-    (function (el) { setTimeout(function () { el.remove(); }, 3400); })(p);
+    (function (el) { setTimeout(function () { el.remove(); }, 3200); })(p);
   }
-}
-function rafaga(xPct, yPct, cols, glow) {
-  var capa = capaFx();
-  for (var k = 0; k < 26; k++) {
-    var s = document.createElement("span"); s.className = "chispa";
-    var ang = Math.random() * Math.PI * 2, dist = 60 + Math.random() * 140;
-    var col = cols[k % cols.length], tam = 4 + Math.random() * 6;
-    s.style.left = xPct + "%"; s.style.top = yPct + "%";
-    s.style.width = tam + "px"; s.style.height = tam + "px";
-    s.style.background = col;
-    if (glow) s.style.boxShadow = "0 0 10px " + col;
-    s.style.setProperty("--dx", (Math.cos(ang) * dist).toFixed(0) + "px");
-    s.style.setProperty("--dy", (Math.sin(ang) * dist).toFixed(0) + "px");
-    s.style.animationDuration = (0.8 + Math.random() * 0.7).toFixed(2) + "s";
-    capa.appendChild(s);
-    (function (el) { setTimeout(function () { el.remove(); }, 1700); })(s);
-  }
-}
-function fireworks(cols, glow) {
-  [[28, 26, 0], [72, 22, 250], [50, 42, 500], [20, 52, 750], [80, 56, 950]].forEach(function (b) {
-    setTimeout(function () { rafaga(b[0], b[1], cols, glow); }, b[2]);
-  });
-}
-function estrellas() {
-  var capa = capaFx(), emojis = ["\u2B50", "\u2728", "\uD83D\uDC96", "\uD83C\uDF1F"];
-  [[50, 36, 0], [30, 26, 280], [70, 28, 560]].forEach(function (b) {
-    setTimeout(function () {
-      for (var k = 0; k < 14; k++) {
-        var s = document.createElement("span"); s.className = "estrellita";
-        var ang = Math.random() * Math.PI * 2, dist = 60 + Math.random() * 150;
-        s.textContent = emojis[k % emojis.length];
-        s.style.left = b[0] + "%"; s.style.top = b[1] + "%";
-        s.style.fontSize = (14 + Math.random() * 16).toFixed(0) + "px";
-        s.style.setProperty("--dx", (Math.cos(ang) * dist).toFixed(0) + "px");
-        s.style.setProperty("--dy", (Math.sin(ang) * dist).toFixed(0) + "px");
-        s.style.animationDuration = (0.9 + Math.random() * 0.7).toFixed(2) + "s";
-        capa.appendChild(s);
-        (function (el) { setTimeout(function () { el.remove(); }, 1800); })(s);
-      }
-    }, b[2]);
-  });
-}
-function celebrar(grande) {
-  var tipo = TEMAS[S.tema].celebra;
-  if (tipo === "confeti") { confeti(["#AEEA00", "#FFC93C", "#4CAF57", "#F9A825", "#fff"]); if (grande) setTimeout(function () { confeti(); }, 700); }
-  else if (tipo === "fireworks") { fireworks(["#B388FF", "#00E5FF", "#FF2E93", "#FFE95C", "#fff"], true); if (grande) setTimeout(function () { fireworks(["#FFE95C", "#fff", "#00E5FF"], true); }, 900); }
-  else { estrellas(); if (grande) { confeti(); setTimeout(estrellas, 700); } }
 }
 
 // ---------- Utilidades ----------
 function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-function markHTML(m, gana, i) {
-  var f = fichaDe(m), cls = "marca" + (gana ? " gana" : "") + (i === S.ultima ? " nueva" : "");
+function markHTML(m, gana) {
+  var f = fichaDe(m), cls = "marca" + (gana ? " gana" : "");
+  if (esDBZ(f)) { var d = dbzDe(f); if (d) return '<img class="' + cls + ' poke" src="' + d.img + '" data-paso="1" onerror="pokeErr(this)" alt="' + esc(d.n) + '" draggable="false" />'; return '<span class="' + cls + ' poke-fallo">DBZ</span>'; }
   if (esPoke(f)) { var nom = pokeNombre(f); return '<img class="' + cls + ' poke" src="' + pokeURL(parseInt(f.slice(2), 10)) + '" data-n="' + nom.toLowerCase() + '" onerror="pokeErr(this)" alt="' + nom + '" draggable="false" />'; }
   if (!esClasica(f)) return '<span class="' + cls + ' emoji">' + f + "</span>";
   var color = colorDe(m);
   if (f === "X") return '<svg class="' + cls + '" viewBox="0 0 100 100"><line x1="24" y1="24" x2="76" y2="76" stroke="' + color + '" stroke-width="14" stroke-linecap="round"/><line x1="76" y1="24" x2="24" y2="76" stroke="' + color + '" stroke-width="14" stroke-linecap="round"/></svg>';
   return '<svg class="' + cls + '" viewBox="0 0 100 100"><circle cx="50" cy="50" r="27" fill="none" stroke="' + color + '" stroke-width="14"/></svg>';
 }
-function fichaGrandeHTML(m) {
-  var f = fichaDe(m);
-  if (esPoke(f)) { var nom = pokeNombre(f); return '<img src="' + pokeURL(parseInt(f.slice(2), 10)) + '" data-n="' + nom.toLowerCase() + '" onerror="pokeErr(this)" alt="' + nom + '" draggable="false" />'; }
-  if (!esClasica(f)) return '<span class="emoji">' + f + "</span>";
-  var color = colorDe(m);
-  if (f === "X") return '<svg viewBox="0 0 100 100"><line x1="24" y1="24" x2="76" y2="76" stroke="' + color + '" stroke-width="14" stroke-linecap="round"/><line x1="76" y1="24" x2="24" y2="76" stroke="' + color + '" stroke-width="14" stroke-linecap="round"/></svg>';
-  return '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="27" fill="none" stroke="' + color + '" stroke-width="14"/></svg>';
-}
 function etiquetaDe(m) {
   var f = fichaDe(m);
+  if (esDBZ(f)) { var d = dbzDe(f); if (d) return '<img class="mini" src="' + d.img + '" data-paso="1" onerror="pokeErr(this)" alt="" draggable="false" /> ' + esc(nombreDe(m)); return esc(nombreDe(m)); }
   if (esPoke(f)) { var nom = pokeNombre(f); return '<img class="mini" src="' + pokeURL(parseInt(f.slice(2), 10)) + '" data-n="' + nom.toLowerCase() + '" onerror="pokeErr(this)" alt="' + nom + '" draggable="false" /> ' + esc(nombreDe(m)); }
   return (esClasica(f) ? "" : f + " ") + esc(nombreDe(m));
 }
@@ -522,19 +412,14 @@ function render() {
     var v = S.tablero[i], gana = S.resultado && S.resultado.linea && S.resultado.linea.indexOf(i) > -1;
     var estilo = gana ? ' style="box-shadow:inset 0 0 0 4px ' + colorDe(v) + '"' : "";
     var dis = (v || S.resultado || S.pensando) ? " disabled" : "";
-    celdas += '<button class="celda" data-accion="celda" data-i="' + i + '"' + estilo + dis + ">" + (v ? markHTML(v, gana, i) : "") + "</button>";
+    celdas += '<button class="celda" data-accion="celda" data-i="' + i + '"' + estilo + dis + ">" + (v ? markHTML(v, gana) : "") + "</button>";
   }
 
   var panelHTML = "";
   if (S.panel === "colores") {
-    var temasHTML = Object.keys(TEMAS).map(function (t) {
-      var tm = TEMAS[t], on = S.tema === t;
-      return '<button class="tema' + (on ? " on" : "") + '" data-accion="tema" data-val="' + t + '"><span class="tico">' + tm.icono + '</span>' + tm.nombre + "</button>";
-    }).join("");
-
-    var chips = [["x", "Ficha 1"], ["o", "Ficha 2"], ["tabla", "La tabla"]].map(function (c) {
+    var chips = [["x", "La X"], ["o", "El O"], ["tabla", "La tabla"]].map(function (c) {
       var on = S.editColor === c[0];
-      return '<button class="chip" data-accion="editcolor" data-val="' + c[0] + '"' + (on ? ' style="border-color:' + (c[0] === "tabla" ? S.colores.tabla : S.colores[c[0]]) + ';color:var(--texto)"' : "") + ">" + c[1] + "</button>";
+      return '<button class="chip" data-accion="editcolor" data-val="' + c[0] + '"' + (on ? ' style="border-color:' + S.colores[c[0]] + ';color:' + S.colores[c[0]] + '"' : "") + ">" + c[1] + "</button>";
     }).join("");
 
     var fichasHTML = "";
@@ -554,6 +439,17 @@ function render() {
         var val = "P:" + p[0], sel = S.fichas[lado] === val, usada = S.fichas[otro] === val;
         return '<button class="ficha pokeb' + (sel ? " sel" : "") + (usada ? " usada" : "") + '" data-accion="ficha" data-val="' + val + '"' + (usada ? " disabled" : "") + ' aria-label="' + p[1] + '"><img src="' + pokeURL(p[0]) + '" data-n="' + p[1].toLowerCase() + '" onerror="pokeErr(this)" alt="' + p[1] + '" loading="lazy" draggable="false" /></button>';
       }).join("");
+      var dbzHTML;
+      if (DBZ.length) {
+        dbzHTML = DBZ.map(function (d) {
+          var val = "D:" + d.id, sel = S.fichas[lado] === val, usada = S.fichas[otro] === val;
+          return '<button class="ficha pokeb' + (sel ? " sel" : "") + (usada ? " usada" : "") + '" data-accion="ficha" data-val="' + val + '"' + (usada ? " disabled" : "") + ' aria-label="' + esc(d.n) + '"><img src="' + d.img + '" data-paso="1" onerror="pokeErr(this)" alt="' + esc(d.n) + '" loading="lazy" draggable="false" /></button>';
+        }).join("");
+        dbzHTML = '<div class="fichas">' + dbzHTML + "</div>";
+      } else {
+        cargarDBZ().then(render);
+        dbzHTML = '<div class="vacio">Cargando stickers\u2026 (se necesita internet la primera vez)</div>';
+      }
       var infoHTML = "";
       if (esPoke(S.fichas[lado])) {
         var idSel = parseInt(S.fichas[lado].slice(2), 10);
@@ -566,14 +462,17 @@ function render() {
           }
         }
       }
-      fichasHTML = "<h4>Elige la ficha</h4><div class=\"fichas\">" + opciones + "</div><h4>Pok\u00E9mon</h4><div class=\"fichas\">" + pokesHTML + "</div>" + infoHTML;
+      if (esDBZ(S.fichas[lado])) {
+        var dSel = dbzDe(S.fichas[lado]);
+        if (dSel) infoHTML = '<div class="pokeinfo"><div class="tit"><b>' + esc(dSel.n) + "</b> \u2014 Dragon Ball</div></div>";
+      }
+      fichasHTML = "<h4>Elige la ficha</h4><div class=\"fichas\">" + opciones + "</div><h4>Pok\u00E9mon</h4><div class=\"fichas\">" + pokesHTML + "</div><h4>Dragon Ball</h4>" + dbzHTML + infoHTML;
     }
 
     var sw = PALETA.map(function (col) {
       return '<button class="swatch' + (S.colores[S.editColor] === col ? " sel" : "") + '" data-accion="color" data-val="' + col + '" style="background:' + col + '"></button>';
     }).join("");
-    panelHTML = '<div class="panel"><h3>\uD83C\uDF0D Elige el mundo</h3><div class="temas">' + temasHTML + "</div>" +
-      '<h3 style="margin-top:12px">\uD83C\uDFA8 Personalizar</h3><div class="selq">' + chips + "</div>" + fichasHTML + "<h4>Elige el color</h4><div class=\"swatches\">" + sw + "</div></div>";
+    panelHTML = '<div class="panel"><h3>\uD83C\uDFA8 Personalizar</h3><div class="selq">' + chips + "</div>" + fichasHTML + "<h4>Elige el color</h4><div class=\"swatches\">" + sw + "</div></div>";
   } else if (S.panel === "jugadores") {
     var roster = S.jugadores.map(function (n) {
       return '<span class="namechip">' + esc(n) + '<button class="x" data-accion="delname" data-val="' + esc(n) + '">\u00D7</button></span>';
@@ -637,10 +536,11 @@ function render() {
     pieHTML = '<button class="link" data-accion="ceroq">\uD83D\uDD04 Empezar de cero</button>';
   }
 
-  var tm = TEMAS[S.tema];
+  document.body.classList.toggle("enfoque", S.enfoque);
   document.getElementById("app").innerHTML =
     '<div class="tarjeta">' +
-      '<div class="cabecera"><div class="titulo"><span class="gatito">' + tm.icono + '</span><div><h1>X y O</h1><p class="sub">' + tm.sub + '</p></div></div>' +
+      '<button class="salirEnf" data-accion="salirenf">\u2716 Salir</button>' +
+      '<div class="cabecera"><div class="titulo"><span class="gatito">\uD83D\uDC31</span><div><h1>X y O</h1><p class="sub">El juego del gato</p></div></div>' +
       '<div class="cab-botones"><button class="icono" data-accion="panel" data-val="tabla">\uD83C\uDFC6</button><button class="icono" data-accion="mute">' + (S.silencio ? "\uD83D\uDD07" : "\uD83D\uDD0A") + "</button></div></div>" +
       '<div class="modo"><button data-accion="modo" data-val="dos" class="' + (S.modo === "dos" ? "on" : "") + '">\uD83D\uDC65 2 jugadores</button><button data-accion="modo" data-val="compu" class="' + (S.modo === "compu" ? "on" : "") + '">\uD83E\uDD16 vs. la compu</button></div>' +
       difHTML + serieHTML +
@@ -650,7 +550,7 @@ function render() {
         '<div class="pill" style="border-color:' + S.colores.o + '"><span class="pill-etq" style="color:' + S.colores.o + '">' + etiquetaDe("O") + '</span><span class="pill-num">' + S.marcador.O + "</span></div>" +
       "</div>" +
       '<div class="estado">' + estadoHTML + "</div>" +
-      '<div class="tabla' + (S.sacudir ? " shake" : "") + '" style="background:' + S.colores.tabla + '">' + celdas + "</div>" +
+      '<div class="tabla" style="background:' + S.colores.tabla + '">' + celdas + "</div>" +
       '<div class="acciones">' +
         '<button class="btn btn-jugar" data-accion="nueva">' + (S.campeon ? "\uD83C\uDFC6 Nueva serie" : (S.resultado ? "\uD83C\uDFAE Jugar otra vez" : "\u21BB Reiniciar")) + "</button>" +
         '<button class="btn btn-sec" data-accion="panel" data-val="colores">\uD83C\uDFA8 Fichas</button>' +
@@ -659,43 +559,18 @@ function render() {
       panelHTML +
       '<div class="pie">' + pieHTML + "</div>" +
     "</div>";
-
-  // ---- Pantalla de victoria / campeón ----
-  var velo = document.getElementById("velo");
-  if (S.velo && S.resultado && S.resultado.jugador !== "empate") {
-    var g = S.campeon || S.resultado.jugador;
-    var esCamp = S.velo === "campeon";
-    velo.innerHTML =
-      '<div class="rayos"></div>' +
-      '<div class="vcontenido">' +
-        '<div class="vmedalla">' + (esCamp ? "\uD83C\uDFC6" : "\uD83C\uDFC5") + "</div>" +
-        '<div class="vficha">' + fichaGrandeHTML(g) + "</div>" +
-        '<div class="vtitulo">' + (esCamp ? "\u00A1CAMPE\u00D3N!" : "\u00A1VICTORIA!") + "</div>" +
-        '<div class="vnombre">' + esc(nombreDe(g)) + (esCamp ? " gan\u00F3 la serie" : " gan\u00F3 la ronda") + "</div>" +
-        '<div class="vbotones">' +
-          '<button class="vbtn" data-accion="' + (esCamp ? "nueva" : "revancha") + '">' + (esCamp ? "\uD83C\uDFC6 Nueva serie" : "\u2694\uFE0F Revancha") + "</button>" +
-          '<button class="vbtn suave" data-accion="cerrarvelo">Ver tablero</button>' +
-        "</div>" +
-      "</div>";
-    velo.className = "abierto";
-  } else {
-    velo.className = ""; velo.innerHTML = "";
-  }
 }
 
 // ---------- Eventos ----------
 var appEl = document.getElementById("app");
-function manejar(e) {
+appEl.addEventListener("click", function (e) {
   var el = e.target.closest("[data-accion]"); if (!el) return;
   asegurar();
   var a = el.dataset.accion, val = el.dataset.val, role = el.dataset.role;
   if (a === "celda") jugarCelda(parseInt(el.dataset.i, 10));
   else if (a === "nueva") nuevaRonda();
-  else if (a === "revancha") nuevaRonda();
-  else if (a === "cerrarvelo") { S.velo = null; sClick(); render(); }
   else if (a === "mute") { S.silencio = !S.silencio; render(); }
   else if (a === "panel") { S.panel = S.panel === val ? null : val; sClick(); render(); }
-  else if (a === "tema") setTema(val);
   else if (a === "editcolor") { S.editColor = val; render(); }
   else if (a === "color") { S.colores[S.editColor] = val; guardar(K_COL, S.colores); sClick(); render(); }
   else if (a === "ficha") setFicha(val);
@@ -705,14 +580,13 @@ function manejar(e) {
   else if (a === "agregar") agregarNombre();
   else if (a === "delname") borrarNombre(val);
   else if (a === "asignar") asignar(role, val);
+  else if (a === "salirenf") { S.enfoque = false; render(); }
   else if (a === "ceroq") { S.confirmar = "cero"; render(); }
   else if (a === "cerosi") empezarDeCero();
   else if (a === "histq") { S.confirmar = "hist"; render(); }
   else if (a === "histsi") { S.hist = {}; S.confirmar = null; guardar(K_HIST, S.hist); sClick(); render(); }
   else if (a === "cancelar") { S.confirmar = null; render(); }
-}
-appEl.addEventListener("click", manejar);
-document.getElementById("velo").addEventListener("click", manejar);
+});
 appEl.addEventListener("input", function (e) {
   if (e.target && e.target.id === "nombreInput") S.nuevoNombre = e.target.value;
 });
@@ -722,7 +596,6 @@ appEl.addEventListener("keydown", function (e) {
 
 // ---------- Inicio ----------
 (async function () {
-  var t = await cargar(K_TEMA); if (t && TEMAS[t]) { S.tema = t; document.body.dataset.tema = t; }
   var m = await cargar(K_MARC); if (m && typeof m.X === "number") S.marcador = m;
   var c = await cargar(K_COL); if (c && c.x) S.colores = c;
   var f = await cargar(K_FICH); if (f && f.x) S.fichas = f;
@@ -739,6 +612,7 @@ appEl.addEventListener("keydown", function (e) {
     if (S.jugadores.indexOf(S.nombreO) < 0) S.nombreO = S.jugadores[S.jugadores.length > 1 ? 1 : 0];
   }
   render();
+  cargarDBZ().then(function () { if (S.panel === "colores") render(); });
 })();
 </script>
 </body>
