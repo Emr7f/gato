@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>X y O</title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="X y O" />
+<meta name="theme-color" content="#7C5CFC" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%B1%3C/text%3E%3C/svg%3E" />
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; overflow-x: hidden; width: 100%; }
+body {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: max(18px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
+  background: linear-gradient(160deg, #FFF6EC 0%, #FFE9F3 55%, #EDE7FF 100%);
+  font-family: 'Fredoka', system-ui, -apple-system, sans-serif; color: #4A3F6B;
+}
+#app { width: 100%; max-width: 380px; }
+.tarjeta {
+  background: #fff; border-radius: 30px; padding: 18px 18px 14px;
+  box-shadow: 0 18px 40px rgba(124,92,252,.18), 0 4px 10px rgba(0,0,0,.05);
+  overflow: hidden;
+}
+.cabecera { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.titulo { display: flex; align-items: center; gap: 9px; }
+.gatito { font-size: 32px; line-height: 1; }
+.titulo h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: .5px; }
+.sub { margin: 0; font-size: 12px; font-weight: 500; color: #A99CC9; }
+.icono { border: none; background: #F3EEFF; width: 42px; height: 42px; border-radius: 13px; font-size: 19px; cursor: pointer; }
+.icono:active { transform: scale(.9); }
+.cab-botones { display: flex; gap: 6px; }
+.leyenda { font-size: 11px; color: #A99CC9; font-weight: 600; margin-bottom: 8px; }
+.tfila { display: grid; grid-template-columns: 1fr 36px 36px 36px 36px; align-items: center; padding: 7px 6px; border-radius: 10px; font-size: 14px; font-weight: 600; }
+.tfila:nth-child(odd) { background: #fff; }
+.tfila span { text-align: center; }
+.tfila .tnom { text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tfila.tcab { font-size: 13px; padding: 2px 6px; background: none; }
+.vacio { text-align: center; font-size: 13px; color: #A99CC9; font-weight: 600; padding: 10px 0; }
+
+.modo { display: flex; gap: 6px; background: #F3EEFF; padding: 4px; border-radius: 14px; margin-bottom: 8px; }
+.modo button { flex: 1; border: none; background: transparent; padding: 9px 6px; border-radius: 11px; font-family: inherit; font-size: 13.5px; font-weight: 600; color: #8B7FB0; cursor: pointer; }
+.modo button.on { background: #fff; color: #4A3F6B; box-shadow: 0 2px 6px rgba(124,92,252,.15); }
+
+.dif { display: flex; gap: 6px; margin-bottom: 10px; }
+.dif button { flex: 1; border: 2px solid #EDE7FF; background: #fff; padding: 7px; border-radius: 11px; font-family: inherit; font-size: 12.5px; font-weight: 600; color: #A99CC9; cursor: pointer; }
+.dif button.on { border-color: #7C5CFC; color: #7C5CFC; }
+.serieRow { align-items: center; }
+.serieLab { font-size: 12px; font-weight: 700; color: #A99CC9; padding: 0 3px; white-space: nowrap; }
+.serieRow button { padding: 7px 4px; }
+.serietxt { text-align: center; font-size: 12px; font-weight: 600; color: #8B7FB0; margin: -3px 0 10px; }
+
+.marcador { display: flex; gap: 7px; margin-bottom: 10px; }
+.pill { flex: 1; background: #FCFAFF; border: 2.5px solid #EDE7FF; border-radius: 15px; padding: 7px 5px; text-align: center; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.pill.emp { flex: .9; }
+.pill-etq { font-size: 13.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pill-etq.gris { color: #B4A9D0; font-size: 11px; }
+.pill-num { font-size: 22px; font-weight: 700; color: #4A3F6B; }
+
+.estado { text-align: center; font-size: 20px; font-weight: 600; margin: 2px 0 12px; min-height: 28px; display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; }
+.estado b { font-weight: 700; }
+
+.tabla { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; padding: 8px; border-radius: 22px; margin-bottom: 14px; transition: background .3s; overflow: hidden; }
+.celda { aspect-ratio: 1/1; background: #fff; border: none; border-radius: 15px; cursor: pointer; padding: 12%; display: flex; align-items: center; justify-content: center; overflow: hidden; min-width: 0; }
+.celda:active:not(:disabled) { transform: scale(.94); }
+.marca { width: 100%; height: 100%; animation: pop .25s cubic-bezier(.34,1.4,.64,1); }
+.marca.emoji { display: flex; align-items: center; justify-content: center; font-size: clamp(30px, 12.5vw, 52px); line-height: 1; }
+.marca.gana { animation: latido .8s ease-in-out infinite; }
+@keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes latido { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.acciones { display: flex; gap: 7px; }
+.btn { border: none; border-radius: 15px; padding: 13px 6px; font-family: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; min-width: 0; }
+.btn:active { transform: scale(.96); }
+.btn-jugar { flex: 1.6; background: #6BCB77; color: #fff; box-shadow: 0 5px 0 #4CAF57; }
+.btn-jugar:active { box-shadow: 0 2px 0 #4CAF57; }
+.btn-sec { flex: 1; background: #FFE3B3; color: #A0691C; box-shadow: 0 5px 0 #F0C67E; font-size: 13px; }
+.btn-sec:active { box-shadow: 0 2px 0 #F0C67E; }
+.btn-sec.jug { background: #D8EAFF; color: #1E5DAA; box-shadow: 0 5px 0 #AECDF5; }
+.btn-sec.jug:active { box-shadow: 0 2px 0 #AECDF5; }
+
+.panel { margin-top: 11px; background: #FBFAFF; border: 2px solid #EDE7FF; border-radius: 18px; padding: 13px; animation: baja .22s ease; }
+@keyframes baja { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+.panel h3 { margin: 0 0 9px; font-size: 13px; font-weight: 700; color: #8B7FB0; }
+.panel h4 { margin: 10px 0 7px; font-size: 12px; font-weight: 700; color: #A99CC9; }
+.selq { display: flex; gap: 6px; margin-bottom: 11px; flex-wrap: wrap; }
+.chip { flex: 1; min-width: 88px; border: 2px solid #E4DCF7; background: #fff; color: #8B7FB0; border-radius: 11px; padding: 8px 5px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+.swatches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; }
+.swatch { aspect-ratio: 1/1; border-radius: 50%; border: 3px solid #fff; cursor: pointer; box-shadow: 0 0 0 2px #E4DCF7; }
+.swatch:active { transform: scale(.9); }
+.swatch.sel { box-shadow: 0 0 0 3px #4A3F6B; transform: scale(1.08); }
+.fichas { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-bottom: 4px; }
+.ficha { aspect-ratio: 1/1; border-radius: 14px; border: 2px solid #E4DCF7; background: #fff; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; min-width: 0; overflow: hidden; }
+.ficha.sel { border-color: #4A3F6B; box-shadow: 0 0 0 2px #4A3F6B33; transform: scale(1.06); }
+.ficha.usada { opacity: .3; }
+.ficha svg { width: 60%; height: 60%; }
+.ficha.pokeb img { width: 88%; height: 88%; max-width: 100%; object-fit: contain; pointer-events: none; }
+.pokeinfo { margin-top: 10px; background: #fff; border: 2px solid #E4DCF7; border-radius: 12px; padding: 10px 12px; font-size: 12.5px; color: #6B5FA0; line-height: 1.5; }
+.pokeinfo b { color: #4A3F6B; }
+.pokeinfo .tit { font-size: 14px; margin-bottom: 4px; }
+.marca.poke { object-fit: contain; }
+.poke-fallo { display: flex; align-items: center; justify-content: center; font-size: clamp(10px, 3.4vw, 14px); font-weight: 700; color: #4A3F6B; text-align: center; line-height: 1.1; padding: 4px; overflow: hidden; }
+.mini-fallo { font-size: 11px; font-weight: 700; color: #8B7FB0; }
+.mini { width: 19px; height: 19px; object-fit: contain; vertical-align: -4px; }
+
+.agregar { display: flex; gap: 6px; margin-bottom: 12px; }
+.agregar input { flex: 1; min-width: 0; border: 2px solid #E4DCF7; border-radius: 11px; padding: 10px 12px; font-family: inherit; font-size: 15px; color: #4A3F6B; background: #fff; outline: none; }
+.agregar input:focus { border-color: #7C5CFC; }
+.agregar button { border: none; background: #6BCB77; color: #fff; border-radius: 11px; padding: 0 16px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.roster { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.namechip { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 2px solid #E4DCF7; border-radius: 20px; padding: 5px 6px 5px 12px; font-size: 13px; font-weight: 600; color: #4A3F6B; }
+.namechip .x { width: 20px; height: 20px; border-radius: 50%; background: #FFE0E0; color: #E24; border: none; font-size: 13px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.asig { margin-bottom: 10px; }
+.asig .lab { font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
+.asig .fila { display: flex; flex-wrap: wrap; gap: 6px; }
+.pick { border: 2px solid #E4DCF7; background: #fff; color: #8B7FB0; border-radius: 20px; padding: 6px 13px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.pick.on { color: #fff; }
+
+.pie { text-align: center; margin-top: 11px; }
+.link { background: none; border: none; color: #B4A9D0; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; padding: 4px 8px; }
+.link.fuerte { color: #FF5A5F; font-weight: 700; }
+.confirmar { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; font-size: 13px; color: #8B7FB0; }
+
+#confeti { position: fixed; inset: 0; pointer-events: none; z-index: 60; overflow: hidden; }
+.pieza { position: absolute; top: -20px; border-radius: 2px; animation: caer linear forwards; }
+@keyframes caer { 0% { transform: translateY(-20px) rotate(0); opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: .9; } }
+@media (prefers-reduced-motion: reduce) { .marca, .panel, .pieza { animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="confeti"></div>
+<script>
+"use strict";
+
+// ---------- Almacenamiento en el teléfono ----------
+async function cargar(key) {
+  try {
+    if (window.storage) { var r = await window.storage.get(key); return r ? JSON.parse(r.value) : null; }
+    var v = localStorage.getItem(key); return v ? JSON.parse(v) : null;
+  } catch (e) { return null; }
+}
+async function guardar(key, value) {
+  try {
+    if (window.storage) { await window.storage.set(key, JSON.stringify(value)); return; }
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {}
+}
+var K_MARC = "xyo:marcador", K_COL = "xyo:colores", K_CFG = "xyo:config", K_FICH = "xyo:fichas", K_HIST = "xyo:historial";
+
+// ---------- Sonidos ----------
+var AC = window.AudioContext || window.webkitAudioContext, ctx = null;
+function asegurar() { if (!ctx && AC) ctx = new AC(); if (ctx && ctx.state === "suspended") ctx.resume(); return ctx; }
+function tono(f, dur, tipo, ini, vol) {
+  var c = asegurar(); if (!c) return;
+  var t = c.currentTime + (ini || 0), o = c.createOscillator(), g = c.createGain();
+  o.type = tipo || "sine"; o.frequency.setValueAtTime(f, t);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol || .18, t + .012);
+  g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+  o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + .02);
+}
+function sTap(m) { if (!S.silencio) tono(m === "X" ? 620 : 440, .14, "triangle", 0, .16); }
+function sGanar() { if (S.silencio) return; [523, 659, 784, 1047].forEach(function (f, i) { tono(f, .28, "triangle", i * .11, .2); }); }
+function sEmpate() { if (S.silencio) return; tono(392, .2, "sine", 0, .15); tono(311, .28, "sine", .14, .15); }
+function sCampeon() { if (S.silencio) return; [523, 659, 784, 1047, 784, 1047, 1319].forEach(function (f, i) { tono(f, .3, "triangle", i * .13, .2); }); }
+function sClick() { if (!S.silencio) tono(700, .08, "sine", 0, .1); }
+
+// ---------- Estado ----------
+var PALETA = ["#FF5A5F","#FF8A3D","#FFC93C","#6BCB77","#2D9CDB","#4D5DFB","#7C5CFC","#E84393","#8D6E63","#2D3436"];
+var EMOJIS = ["🐢","🐠","🐱","🐭","🐘","🐶","🦁","🐸","🦄","🐼","🦖","🐙","🐤","⭐","❤️"];
+// Los 21 Pokémon más famosos (uso privado): [id, nombre, carta icónica, historia]
+var POKES = [
+  [25, "Pikachu", "Pikachu Illustrator (1998) — la carta m\u00E1s cara de la historia: una lleg\u00F3 a venderse por m\u00E1s de 5 millones de d\u00F3lares", "La mascota de Pok\u00E9mon. Guarda electricidad en sus mejillas y la suelta cuando se emociona o se asusta."],
+  [6, "Charizard", "Charizard Base Set 1\u00AA edici\u00F3n (1999) — el \u201Csanto grial\u201D de los coleccionistas", "Su fuego puede derretir rocas. Vuela buscando rivales fuertes, pero nunca le lanza fuego a alguien m\u00E1s d\u00E9bil que \u00E9l."],
+  [1, "Bulbasaur", "Bulbasaur Base Set (1999)", "Nace con una semilla en el lomo que crece junto con \u00E9l hasta convertirse en una gran flor."],
+  [4, "Charmander", "Charmander Base Set (1999)", "La llama de su cola dice c\u00F3mo se siente: arde fuerte cuando est\u00E1 feliz y chispea cuando se enoja."],
+  [7, "Squirtle", "Squirtle Base Set (1999)", "Se esconde en su caparaz\u00F3n y lanza chorros de agua con punter\u00EDa perfecta."],
+  [133, "Eevee", "Eevee de Eevee Heroes (2021, Jap\u00F3n)", "Su ADN es un misterio: puede evolucionar a 8 Pok\u00E9mon distintos seg\u00FAn c\u00F3mo viva. Por eso le dicen el Pok\u00E9mon evoluci\u00F3n."],
+  [150, "Mewtwo", "Mewtwo holo Base Set (1999)", "Fue creado por cient\u00EDficos a partir del ADN de Mew. Es de los Pok\u00E9mon ps\u00EDquicos m\u00E1s poderosos que existen."],
+  [151, "Mew", "Ancient Mew (2000) — escrita en runas antiguas, sali\u00F3 con la pel\u00EDcula Pok\u00E9mon 2000", "Dicen que su ADN contiene el de todos los Pok\u00E9mon. Es tan raro que muchos creen que solo es un mito."],
+  [94, "Gengar", "Gengar VMAX arte alterno (Fusion Strike, 2021) — de las cartas modernas m\u00E1s buscadas", "Le encanta esconderse en las sombras de la gente y hacer travesuras. Si sientes fr\u00EDo de repente\u2026 puede ser Gengar."],
+  [143, "Snorlax", "Snorlax holo de Jungle (1999)", "Come 400 kilos de comida al d\u00EDa y luego se duerme. A veces bloquea caminos enteros con su siesta."],
+  [39, "Jigglypuff", "Jigglypuff de Jungle (1999)", "Su canci\u00F3n duerme a cualquiera. En la serie se enojaba y les rayaba la cara a los que se quedaban dormidos."],
+  [448, "Lucario", "Lucario GX arco\u00EDris (2017)", "Puede sentir el \u201Caura\u201D de los seres vivos y entender los sentimientos de las personas sin palabras."],
+  [658, "Greninja", "Greninja GX shiny de Hidden Fates (2019)", "El ninja de los Pok\u00E9mon: crea estrellas de agua y se mueve tan r\u00E1pido que casi no se ve."],
+  [130, "Gyarados", "Shining Gyarados (Neo Revelation, 2001) — el famoso Gyarados rojo", "Evoluciona del debilucho Magikarp: la prueba de que con perseverancia hasta el m\u00E1s peque\u00F1o se vuelve gigante."],
+  [149, "Dragonite", "Dragonite holo de Fossil (1999)", "Aunque parece feroz, es muy amable: dicen que rescata a personas en el mar y da la vuelta al mundo en 16 horas."],
+  [9, "Blastoise", "Blastoise holo Base Set (1999)", "Los ca\u00F1ones de su caparaz\u00F3n disparan chorros de agua capaces de atravesar el acero."],
+  [3, "Venusaur", "Venusaur holo Base Set (1999)", "Su flor suelta un aroma que calma a todos a su alrededor, y se llena de energ\u00EDa con el sol."],
+  [54, "Psyduck", "Psyduck de Fossil (1999)", "Siempre le duele la cabeza. Cuando el dolor llega al m\u00E1ximo, libera poderes ps\u00EDquicos incre\u00EDbles sin darse cuenta."],
+  [197, "Umbreon", "Umbreon VMAX arte alterno \u201CMoonbreon\u201D (Evolving Skies, 2021) — la carta moderna m\u00E1s cotizada", "Eevee se convierte en Umbreon cuando hay mucha amistad y cae la noche. Sus anillos brillan bajo la luna."],
+  [700, "Sylveon", "Sylveon VMAX arte alterno (Evolving Skies, 2021)", "Sus listones sueltan un aura que calma las peleas. Evoluciona de Eevee por puro cari\u00F1o."],
+  [877, "Morpeko", "Morpeko V-UNION (2021) — un rompecabezas de 4 cartas que se arma", "Tiene dos caras: feliz cuando est\u00E1 lleno y gru\u00F1\u00F3n cuando tiene hambre. Siempre carga semillas para no cambiar de humor."]
+];
+function pokeURL(id) { return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + id + ".png"; }
+// Plan B si una imagen no carga: intenta otra fuente y, si tampoco, muestra el nombre.
+window.pokeErr = function (img) {
+  if (!img.dataset.paso) {
+    img.dataset.paso = "1";
+    img.src = "https://img.pokemondb.net/sprites/home/normal/" + (img.dataset.n || "") + ".png";
+    return;
+  }
+  var s = document.createElement("span");
+  s.className = img.classList.contains("mini") ? "mini-fallo" : "marca poke-fallo";
+  s.textContent = img.alt || "?";
+  img.replaceWith(s);
+};
+function esPoke(f) { return typeof f === "string" && f.indexOf("P:") === 0; }
+function pokeNombre(f) { var id = parseInt(f.slice(2), 10); for (var i = 0; i < POKES.length; i++) if (POKES[i][0] === id) return POKES[i][1]; return "Pok\u00E9mon"; }
+var LINEAS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+var S = {
+  tablero: Array(9).fill(null), turno: "X", empieza: "X", resultado: null,
+  marcador: { X: 0, O: 0, empates: 0 },
+  colores: { x: "#FF5A5F", o: "#2D9CDB", tabla: "#7C5CFC" },
+  fichas: { x: "X", o: "O" }, // "X"/"O" clásicos, o un emoji
+  modo: "dos", dificultad: "facil",
+  jugadores: ["Jugador 1", "Jugador 2"], nombreX: "Jugador 1", nombreO: "Jugador 2",
+  silencio: false, panel: null, editColor: "x", nuevoNombre: "",
+  confirmar: null, pensando: false,
+  serie: 0, campeon: null, // serie: 0 = libre, o 3/5/7/9/13 (mejor de N)
+  hist: {}, // historial de por vida por persona: { nombre: {g, e, p, c} }
+};
+
+// ---------- Lógica ----------
+function ganadorDe(b) {
+  for (var i = 0; i < LINEAS.length; i++) { var l = LINEAS[i]; if (b[l[0]] && b[l[0]] === b[l[1]] && b[l[0]] === b[l[2]]) return { jugador: b[l[0]], linea: l }; }
+  if (b.every(function (c) { return c; })) return { jugador: "empate", linea: null };
+  return null;
+}
+function mm(b, esO, prof) {
+  var r = ganadorDe(b);
+  if (r) { if (r.jugador === "O") return 10 - prof; if (r.jugador === "X") return prof - 10; return 0; }
+  var best = esO ? -Infinity : Infinity;
+  for (var i = 0; i < 9; i++) if (!b[i]) { b[i] = esO ? "O" : "X"; var s = mm(b, !esO, prof + 1); b[i] = null; best = esO ? Math.max(best, s) : Math.min(best, s); }
+  return best;
+}
+function mejorJugada(b) { var best = -Infinity, idx = -1; for (var i = 0; i < 9; i++) if (!b[i]) { b[i] = "O"; var s = mm(b, false, 0); b[i] = null; if (s > best) { best = s; idx = i; } } return idx; }
+function jugadaAzar(b) { var v = []; for (var i = 0; i < 9; i++) if (!b[i]) v.push(i); return v[Math.floor(Math.random() * v.length)]; }
+
+function nombreDe(m) { return m === "X" ? S.nombreX : (S.modo === "compu" ? "La compu" : S.nombreO); }
+function statDe(n) { if (!S.hist[n]) S.hist[n] = { g: 0, e: 0, p: 0, c: 0 }; return S.hist[n]; }
+function registrarRonda(res) {
+  var nX = nombreDe("X"), nO = nombreDe("O");
+  if (nX === nO) return; // misma persona en ambos lados: no cuenta
+  if (res.jugador === "empate") { statDe(nX).e++; statDe(nO).e++; }
+  else {
+    var gana = nombreDe(res.jugador), pierde = res.jugador === "X" ? nO : nX;
+    statDe(gana).g++; statDe(pierde).p++;
+    if (S.campeon) statDe(gana).c++;
+  }
+  guardar(K_HIST, S.hist);
+}
+function colorDe(m) { return m === "X" ? S.colores.x : S.colores.o; }
+function fichaDe(m) { return S.fichas[m === "X" ? "x" : "o"]; }
+function metaSerie() { return S.serie ? Math.floor(S.serie / 2) + 1 : 0; }
+function esClasica(f) { return f === "X" || f === "O"; }
+
+// ---------- Aplicar jugadas ----------
+function aplicar(marca, i) {
+  if (S.tablero[i] || S.resultado) return;
+  S.tablero[i] = marca; sTap(marca);
+  var r = ganadorDe(S.tablero);
+  if (r) {
+    S.resultado = r;
+    if (r.jugador === "empate") { S.marcador.empates++; sEmpate(); }
+    else {
+      S.marcador[r.jugador]++;
+      var meta = metaSerie();
+      if (meta && S.marcador[r.jugador] >= meta) { S.campeon = r.jugador; confeti(); setTimeout(confeti, 600); sCampeon(); }
+      else { confeti(); sGanar(); }
+    }
+    registrarRonda(r);
+    guardar(K_MARC, S.marcador);
+  } else { S.turno = marca === "X" ? "O" : "X"; }
+  render();
+  if (!S.resultado && S.modo === "compu" && S.turno === "O") {
+    S.pensando = true; render();
+    setTimeout(function () { S.pensando = false; compuMove(); }, 550);
+  }
+}
+function compuMove() {
+  if (S.resultado) return;
+  var i = S.dificultad === "dificil" ? mejorJugada(S.tablero) : jugadaAzar(S.tablero);
+  aplicar("O", i);
+}
+function jugarCelda(i) {
+  if (S.pensando || S.resultado || S.tablero[i]) return;
+  if (S.modo === "compu" && S.turno === "O") return;
+  aplicar(S.turno, i);
+}
+function nuevaRonda() {
+  if (S.campeon) { empezarDeCero(); return; } // terminó la serie: arranca una nueva
+  if (S.modo === "dos") { S.empieza = S.empieza === "X" ? "O" : "X"; S.turno = S.empieza; }
+  else { S.empieza = "X"; S.turno = "X"; }
+  S.tablero = Array(9).fill(null); S.resultado = null; S.pensando = false; sClick(); render();
+}
+function empezarDeCero() {
+  S.marcador = { X: 0, O: 0, empates: 0 };
+  S.tablero = Array(9).fill(null); S.resultado = null; S.pensando = false; S.campeon = null;
+  S.empieza = "X"; S.turno = "X"; S.confirmar = null;
+  guardar(K_MARC, S.marcador); sClick(); render();
+}
+
+// ---------- Jugadores ----------
+function guardarCfg() { guardar(K_CFG, { modo: S.modo, dificultad: S.dificultad, jugadores: S.jugadores, nombreX: S.nombreX, nombreO: S.nombreO, serie: S.serie }); }
+function agregarNombre() {
+  var n = (S.nuevoNombre || "").trim().split(/\s+/)[0];
+  if (!n) return; n = n.slice(0, 14);
+  if (S.jugadores.length >= 12) return;
+  if (S.jugadores.some(function (x) { return x.toLowerCase() === n.toLowerCase(); })) { S.nuevoNombre = ""; render(); return; }
+  S.jugadores.push(n); S.nuevoNombre = ""; guardarCfg(); render();
+}
+function borrarNombre(n) {
+  S.jugadores = S.jugadores.filter(function (x) { return x !== n; });
+  if (!S.jugadores.length) S.jugadores = ["Jugador 1"];
+  if (S.nombreX === n) S.nombreX = S.jugadores[0];
+  if (S.nombreO === n) S.nombreO = S.jugadores[S.jugadores.length > 1 ? 1 : 0];
+  guardarCfg(); render();
+}
+function asignar(role, n) { if (role === "X") S.nombreX = n; else S.nombreO = n; guardarCfg(); render(); }
+function setModo(m) { S.modo = m; guardarCfg(); nuevaRonda(); }
+function setFicha(f) {
+  var lado = S.editColor === "o" ? "o" : "x";
+  var otro = lado === "x" ? "o" : "x";
+  if (!esClasica(f) && S.fichas[otro] === f) return; // no repetir la misma ficha
+  S.fichas[lado] = f; guardar(K_FICH, S.fichas); sClick(); render();
+}
+
+// ---------- Confeti ----------
+function confeti() {
+  var capa = document.getElementById("confeti");
+  var cols = [S.colores.x, S.colores.o, S.colores.tabla, "#FFC93C", "#6BCB77"];
+  for (var i = 0; i < 44; i++) {
+    var p = document.createElement("span"); p.className = "pieza";
+    var tam = 8 + Math.random() * 8;
+    p.style.left = (Math.random() * 96) + "%";
+    p.style.width = tam + "px"; p.style.height = (tam * .6) + "px";
+    p.style.background = cols[i % cols.length];
+    p.style.animationDelay = (Math.random() * .5) + "s";
+    p.style.animationDuration = (1.6 + Math.random() * 1.2) + "s";
+    capa.appendChild(p);
+    (function (el) { setTimeout(function () { el.remove(); }, 3200); })(p);
+  }
+}
+
+// ---------- Utilidades ----------
+function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+function markHTML(m, gana) {
+  var f = fichaDe(m), cls = "marca" + (gana ? " gana" : "");
+  if (esPoke(f)) { var nom = pokeNombre(f); return '<img class="' + cls + ' poke" src="' + pokeURL(parseInt(f.slice(2), 10)) + '" data-n="' + nom.toLowerCase() + '" onerror="pokeErr(this)" alt="' + nom + '" draggable="false" />'; }
+  if (!esClasica(f)) return '<span class="' + cls + ' emoji">' + f + "</span>";
+  var color = colorDe(m);
+  if (f === "X") return '<svg class="' + cls + '" viewBox="0 0 100 100"><line x1="24" y1="24" x2="76" y2="76" stroke="' + color + '" stroke-width="14" stroke-linecap="round"/><line x1="76" y1="24" x2="24" y2="76" stroke="' + color + '" stroke-width="14" stroke-linecap="round"/></svg>';
+  return '<svg class="' + cls + '" viewBox="0 0 100 100"><circle cx="50" cy="50" r="27" fill="none" stroke="' + color + '" stroke-width="14"/></svg>';
+}
+function etiquetaDe(m) {
+  var f = fichaDe(m);
+  if (esPoke(f)) { var nom = pokeNombre(f); return '<img class="mini" src="' + pokeURL(parseInt(f.slice(2), 10)) + '" data-n="' + nom.toLowerCase() + '" onerror="pokeErr(this)" alt="' + nom + '" draggable="false" /> ' + esc(nombreDe(m)); }
+  return (esClasica(f) ? "" : f + " ") + esc(nombreDe(m));
+}
+
+// ---------- Render ----------
+function render() {
+  var estadoHTML;
+  if (S.campeon) estadoHTML = '\uD83C\uDFC6 \u00A1<b style="color:' + colorDe(S.campeon) + '">' + etiquetaDe(S.campeon) + "</b> es el campe\u00F3n!";
+  else if (!S.resultado) estadoHTML = 'Turno de <b style="color:' + colorDe(S.turno) + '">' + etiquetaDe(S.turno) + "</b>";
+  else if (S.resultado.jugador === "empate") estadoHTML = "\u00A1Empate!";
+  else estadoHTML = '\u00A1Gan\u00F3 <b style="color:' + colorDe(S.resultado.jugador) + '">' + etiquetaDe(S.resultado.jugador) + "</b>!";
+
+  var celdas = "";
+  for (var i = 0; i < 9; i++) {
+    var v = S.tablero[i], gana = S.resultado && S.resultado.linea && S.resultado.linea.indexOf(i) > -1;
+    var estilo = gana ? ' style="box-shadow:inset 0 0 0 4px ' + colorDe(v) + '"' : "";
+    var dis = (v || S.resultado || S.pensando) ? " disabled" : "";
+    celdas += '<button class="celda" data-accion="celda" data-i="' + i + '"' + estilo + dis + ">" + (v ? markHTML(v, gana) : "") + "</button>";
+  }
+
+  var panelHTML = "";
+  if (S.panel === "colores") {
+    var chips = [["x", "La X"], ["o", "El O"], ["tabla", "La tabla"]].map(function (c) {
+      var on = S.editColor === c[0];
+      return '<button class="chip" data-accion="editcolor" data-val="' + c[0] + '"' + (on ? ' style="border-color:' + S.colores[c[0]] + ';color:' + S.colores[c[0]] + '"' : "") + ">" + c[1] + "</button>";
+    }).join("");
+
+    var fichasHTML = "";
+    if (S.editColor !== "tabla") {
+      var lado = S.editColor, otro = lado === "x" ? "o" : "x";
+      var clasica = lado === "x" ? "X" : "O";
+      var opciones = '<button class="ficha' + (esClasica(S.fichas[lado]) ? " sel" : "") + '" data-accion="ficha" data-val="' + clasica + '">' +
+        (lado === "x"
+          ? '<svg viewBox="0 0 100 100"><line x1="24" y1="24" x2="76" y2="76" stroke="' + S.colores.x + '" stroke-width="14" stroke-linecap="round"/><line x1="76" y1="24" x2="24" y2="76" stroke="' + S.colores.x + '" stroke-width="14" stroke-linecap="round"/></svg>'
+          : '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="27" fill="none" stroke="' + S.colores.o + '" stroke-width="14"/></svg>') +
+        "</button>";
+      opciones += EMOJIS.map(function (e) {
+        var sel = S.fichas[lado] === e, usada = S.fichas[otro] === e;
+        return '<button class="ficha' + (sel ? " sel" : "") + (usada ? " usada" : "") + '" data-accion="ficha" data-val="' + e + '"' + (usada ? " disabled" : "") + ">" + e + "</button>";
+      }).join("");
+      var pokesHTML = POKES.map(function (p) {
+        var val = "P:" + p[0], sel = S.fichas[lado] === val, usada = S.fichas[otro] === val;
+        return '<button class="ficha pokeb' + (sel ? " sel" : "") + (usada ? " usada" : "") + '" data-accion="ficha" data-val="' + val + '"' + (usada ? " disabled" : "") + ' aria-label="' + p[1] + '"><img src="' + pokeURL(p[0]) + '" data-n="' + p[1].toLowerCase() + '" onerror="pokeErr(this)" alt="' + p[1] + '" loading="lazy" draggable="false" /></button>';
+      }).join("");
+      var infoHTML = "";
+      if (esPoke(S.fichas[lado])) {
+        var idSel = parseInt(S.fichas[lado].slice(2), 10);
+        for (var pi = 0; pi < POKES.length; pi++) {
+          if (POKES[pi][0] === idSel) {
+            infoHTML = '<div class="pokeinfo"><div class="tit"><b>' + POKES[pi][1] + '</b></div>' +
+              '<div>\uD83C\uDCCF <b>Carta ic\u00F3nica:</b> ' + POKES[pi][2] + "</div>" +
+              '<div>\uD83D\uDCD6 ' + POKES[pi][3] + "</div></div>";
+            break;
+          }
+        }
+      }
+      fichasHTML = "<h4>Elige la ficha</h4><div class=\"fichas\">" + opciones + "</div><h4>Pok\u00E9mon</h4><div class=\"fichas\">" + pokesHTML + "</div>" + infoHTML;
+    }
+
+    var sw = PALETA.map(function (col) {
+      return '<button class="swatch' + (S.colores[S.editColor] === col ? " sel" : "") + '" data-accion="color" data-val="' + col + '" style="background:' + col + '"></button>';
+    }).join("");
+    panelHTML = '<div class="panel"><h3>\uD83C\uDFA8 Personalizar</h3><div class="selq">' + chips + "</div>" + fichasHTML + "<h4>Elige el color</h4><div class=\"swatches\">" + sw + "</div></div>";
+  } else if (S.panel === "jugadores") {
+    var roster = S.jugadores.map(function (n) {
+      return '<span class="namechip">' + esc(n) + '<button class="x" data-accion="delname" data-val="' + esc(n) + '">\u00D7</button></span>';
+    }).join("");
+    var pickX = S.jugadores.map(function (n) {
+      var on = S.nombreX === n;
+      return '<button class="pick' + (on ? " on" : "") + '" data-accion="asignar" data-role="X" data-val="' + esc(n) + '"' + (on ? ' style="background:' + S.colores.x + ';border-color:' + S.colores.x + '"' : "") + ">" + esc(n) + "</button>";
+    }).join("");
+    var asigO;
+    if (S.modo === "compu") {
+      asigO = '<div class="asig"><div class="lab" style="color:' + S.colores.o + '">Juega con ' + (esClasica(S.fichas.o) ? "O" : S.fichas.o) + '</div><div class="fila"><button class="pick on" style="background:' + S.colores.o + ';border-color:' + S.colores.o + '">\uD83E\uDD16 La compu</button></div></div>';
+    } else {
+      var pickO = S.jugadores.map(function (n) {
+        var on = S.nombreO === n;
+        return '<button class="pick' + (on ? " on" : "") + '" data-accion="asignar" data-role="O" data-val="' + esc(n) + '"' + (on ? ' style="background:' + S.colores.o + ';border-color:' + S.colores.o + '"' : "") + ">" + esc(n) + "</button>";
+      }).join("");
+      asigO = '<div class="asig"><div class="lab" style="color:' + S.colores.o + '">Juega con ' + (esClasica(S.fichas.o) ? "O" : S.fichas.o) + '</div><div class="fila">' + pickO + "</div></div>";
+    }
+    panelHTML = '<div class="panel"><h3>\uD83D\uDC65 Jugadores</h3>' +
+      '<div class="agregar"><input id="nombreInput" type="text" placeholder="Escribe un nombre" maxlength="14" value="' + esc(S.nuevoNombre) + '" /><button data-accion="agregar">Agregar</button></div>' +
+      '<div class="roster">' + roster + "</div>" +
+      '<div class="asig"><div class="lab" style="color:' + S.colores.x + '">Juega con ' + (esClasica(S.fichas.x) ? "X" : S.fichas.x) + '</div><div class="fila">' + pickX + "</div></div>" +
+      asigO + "</div>";
+  } else if (S.panel === "tabla") {
+    var nombres = Object.keys(S.hist);
+    var filas;
+    if (!nombres.length) {
+      filas = '<div class="vacio">Todav\u00EDa no hay partidas guardadas. \u00A1Jueguen la primera!</div>';
+    } else {
+      nombres.sort(function (a, b) { return S.hist[b].g - S.hist[a].g; });
+      var medallas = ["\uD83E\uDD47", "\uD83E\uDD48", "\uD83E\uDD49"];
+      filas = '<div class="tfila tcab"><span class="tnom"></span><span>\uD83C\uDFC6</span><span>\uD83E\uDD1D</span><span>\uD83D\uDE22</span><span>\uD83D\uDC51</span></div>' +
+        nombres.map(function (n, i) {
+          var h = S.hist[n];
+          return '<div class="tfila"><span class="tnom">' + (medallas[i] || "\u00A0\u00A0") + " " + esc(n) + "</span><span>" + h.g + "</span><span>" + h.e + "</span><span>" + h.p + "</span><span>" + (h.c || 0) + "</span></div>";
+        }).join("");
+    }
+    var borrarHistBtn;
+    if (S.confirmar === "hist") {
+      borrarHistBtn = '<div class="confirmar"><span>\u00BFBorrar todo el historial?</span><button class="link fuerte" data-accion="histsi">S\u00ED</button><button class="link" data-accion="cancelar">No</button></div>';
+    } else {
+      borrarHistBtn = '<div style="text-align:center"><button class="link" data-accion="histq">Borrar historial</button></div>';
+    }
+    panelHTML = '<div class="panel"><h3>\uD83C\uDFC6 Tabla de campeones</h3><div class="leyenda">\uD83C\uDFC6 ganadas \u00B7 \uD83E\uDD1D empates \u00B7 \uD83D\uDE22 perdidas \u00B7 \uD83D\uDC51 series ganadas</div>' + filas + borrarHistBtn + "</div>";
+  }
+
+  var difHTML = S.modo === "compu"
+    ? '<div class="dif"><button data-accion="dif" data-val="facil" class="' + (S.dificultad === "facil" ? "on" : "") + '">\uD83D\uDE0A F\u00E1cil</button><button data-accion="dif" data-val="dificil" class="' + (S.dificultad === "dificil" ? "on" : "") + '">\uD83D\uDD25 Dif\u00EDcil</button></div>'
+    : "";
+
+  var serieOps = [[0, "Libre"], [3, "3"], [5, "5"], [7, "7"], [9, "9"], [13, "13"]];
+  var serieHTML = '<div class="dif serieRow"><span class="serieLab">\uD83C\uDFC6 Serie</span>' + serieOps.map(function (op) {
+    return '<button data-accion="serie" data-val="' + op[0] + '" class="' + (S.serie === op[0] ? "on" : "") + '">' + op[1] + "</button>";
+  }).join("") + "</div>";
+  if (S.serie) serieHTML += '<div class="serietxt">Mejor de ' + S.serie + ": gana el primero en llegar a " + metaSerie() + "</div>";
+
+  var pieHTML;
+  if (S.confirmar === "cero") {
+    pieHTML = '<div class="confirmar"><span>\u00BFEmpezar todo de cero? El marcador se borra.</span><button class="link fuerte" data-accion="cerosi">S\u00ED</button><button class="link" data-accion="cancelar">No</button></div>';
+  } else {
+    pieHTML = '<button class="link" data-accion="ceroq">\uD83D\uDD04 Empezar de cero</button>';
+  }
+
+  document.getElementById("app").innerHTML =
+    '<div class="tarjeta">' +
+      '<div class="cabecera"><div class="titulo"><span class="gatito">\uD83D\uDC31</span><div><h1>X y O</h1><p class="sub">El juego del gato</p></div></div>' +
+      '<div class="cab-botones"><button class="icono" data-accion="panel" data-val="tabla">\uD83C\uDFC6</button><button class="icono" data-accion="mute">' + (S.silencio ? "\uD83D\uDD07" : "\uD83D\uDD0A") + "</button></div></div>" +
+      '<div class="modo"><button data-accion="modo" data-val="dos" class="' + (S.modo === "dos" ? "on" : "") + '">\uD83D\uDC65 2 jugadores</button><button data-accion="modo" data-val="compu" class="' + (S.modo === "compu" ? "on" : "") + '">\uD83E\uDD16 vs. la compu</button></div>' +
+      difHTML + serieHTML +
+      '<div class="marcador">' +
+        '<div class="pill" style="border-color:' + S.colores.x + '"><span class="pill-etq" style="color:' + S.colores.x + '">' + etiquetaDe("X") + '</span><span class="pill-num">' + S.marcador.X + "</span></div>" +
+        '<div class="pill emp"><span class="pill-etq gris">Empates</span><span class="pill-num">' + S.marcador.empates + "</span></div>" +
+        '<div class="pill" style="border-color:' + S.colores.o + '"><span class="pill-etq" style="color:' + S.colores.o + '">' + etiquetaDe("O") + '</span><span class="pill-num">' + S.marcador.O + "</span></div>" +
+      "</div>" +
+      '<div class="estado">' + estadoHTML + "</div>" +
+      '<div class="tabla" style="background:' + S.colores.tabla + '">' + celdas + "</div>" +
+      '<div class="acciones">' +
+        '<button class="btn btn-jugar" data-accion="nueva">' + (S.campeon ? "\uD83C\uDFC6 Nueva serie" : (S.resultado ? "\uD83C\uDFAE Jugar otra vez" : "\u21BB Reiniciar")) + "</button>" +
+        '<button class="btn btn-sec" data-accion="panel" data-val="colores">\uD83C\uDFA8 Fichas</button>' +
+        '<button class="btn btn-sec jug" data-accion="panel" data-val="jugadores">\uD83D\uDC65 Nombres</button>' +
+      "</div>" +
+      panelHTML +
+      '<div class="pie">' + pieHTML + "</div>" +
+    "</div>";
+}
+
+// ---------- Eventos ----------
+var appEl = document.getElementById("app");
+appEl.addEventListener("click", function (e) {
+  var el = e.target.closest("[data-accion]"); if (!el) return;
+  asegurar();
+  var a = el.dataset.accion, val = el.dataset.val, role = el.dataset.role;
+  if (a === "celda") jugarCelda(parseInt(el.dataset.i, 10));
+  else if (a === "nueva") nuevaRonda();
+  else if (a === "mute") { S.silencio = !S.silencio; render(); }
+  else if (a === "panel") { S.panel = S.panel === val ? null : val; sClick(); render(); }
+  else if (a === "editcolor") { S.editColor = val; render(); }
+  else if (a === "color") { S.colores[S.editColor] = val; guardar(K_COL, S.colores); sClick(); render(); }
+  else if (a === "ficha") setFicha(val);
+  else if (a === "modo") setModo(val);
+  else if (a === "dif") { S.dificultad = val; guardarCfg(); render(); }
+  else if (a === "serie") { S.serie = parseInt(val, 10) || 0; guardarCfg(); sClick(); render(); }
+  else if (a === "agregar") agregarNombre();
+  else if (a === "delname") borrarNombre(val);
+  else if (a === "asignar") asignar(role, val);
+  else if (a === "ceroq") { S.confirmar = "cero"; render(); }
+  else if (a === "cerosi") empezarDeCero();
+  else if (a === "histq") { S.confirmar = "hist"; render(); }
+  else if (a === "histsi") { S.hist = {}; S.confirmar = null; guardar(K_HIST, S.hist); sClick(); render(); }
+  else if (a === "cancelar") { S.confirmar = null; render(); }
+});
+appEl.addEventListener("input", function (e) {
+  if (e.target && e.target.id === "nombreInput") S.nuevoNombre = e.target.value;
+});
+appEl.addEventListener("keydown", function (e) {
+  if (e.target && e.target.id === "nombreInput" && e.key === "Enter") agregarNombre();
+});
+
+// ---------- Inicio ----------
+(async function () {
+  var m = await cargar(K_MARC); if (m && typeof m.X === "number") S.marcador = m;
+  var c = await cargar(K_COL); if (c && c.x) S.colores = c;
+  var f = await cargar(K_FICH); if (f && f.x) S.fichas = f;
+  var h = await cargar(K_HIST); if (h && typeof h === "object") S.hist = h;
+  var cfg = await cargar(K_CFG);
+  if (cfg) {
+    if (cfg.modo) S.modo = cfg.modo;
+    if (cfg.dificultad) S.dificultad = cfg.dificultad;
+    if (Array.isArray(cfg.jugadores) && cfg.jugadores.length) S.jugadores = cfg.jugadores;
+    if (cfg.nombreX) S.nombreX = cfg.nombreX;
+    if (cfg.nombreO) S.nombreO = cfg.nombreO;
+    if (typeof cfg.serie === "number") S.serie = cfg.serie;
+    if (S.jugadores.indexOf(S.nombreX) < 0) S.nombreX = S.jugadores[0];
+    if (S.jugadores.indexOf(S.nombreO) < 0) S.nombreO = S.jugadores[S.jugadores.length > 1 ? 1 : 0];
+  }
+  render();
+})();
+</script>
+</body>
+</html>
